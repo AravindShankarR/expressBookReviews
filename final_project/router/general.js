@@ -20,25 +20,23 @@ public_users.post("/register", (req,res) => {
   }
 });
 
+function getBooks() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(books);
+    }, 2000);
+  });
+}
+
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  //Write your code here
-  let myPromise = new Promise((resolve,reject)=>{
-    if(books){
-      setTimeout(()=>{
-        resolve(books);
-      },2000);
-    }
-    else{
-      reject("Error");
-    }
-  });
-  myPromise.then((books)=>{
-    res.send(JSON.stringify(books,null,4));
-  }).catch((err)=>{
-    res.send(err);
-  });
-  
+public_users.get('/', async function (req, res) {
+  try {
+    // Assume getBooks is a function that returns a Promise that resolves with the list of books
+    const books = await getBooks();
+    res.send(books);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 // Get book details based on ISBN
